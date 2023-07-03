@@ -4,9 +4,7 @@ public class Roles {
     private int id;
     private String name;
 
-    public Roles(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public Roles() {
     }
 
     public int getId() {
@@ -25,4 +23,3 @@ public class Roles {
         this.name = name;
     }
 }
-

@@ -1,6 +1,6 @@
 package org.example.restApi.DAO;
 
-import org.example.db.SetUpandConnectDb;
+import org.example.restApi.db.SetUpandConnectDb;
 import org.example.restApi.Entity.Comments;
 import org.example.restApi.Exception.CustomException;
 

@@ -1,4 +1,4 @@
-package org.example.db;
+package org.example.restApi.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class SetUpandConnectDb {
 
     private Connection connection;
-    private String url="jdbc:mysql://localhost:3306/restapi";
+    private String url="jdbc:mysql://localhost:3306/";
     private String username="root";
     private String password="";
 
@@ -24,11 +24,12 @@ public class SetUpandConnectDb {
             String query = "CREATE DATABASE IF NOT EXISTS RESTAPI";
             Statement st = this.connection.createStatement();
             st.executeUpdate(query);
+            this.connection.setCatalog("restapi");
 
-        }catch (ClassNotFoundException var1) {
-            System.out.println(var1);
-        }catch(SQLException var2){
-            System.out.println(var2);
+        }catch(SQLException var){
+            System.out.println(var);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return this.connection;
     }

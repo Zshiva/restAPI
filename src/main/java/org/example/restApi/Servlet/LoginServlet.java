@@ -14,37 +14,37 @@ import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+    private UserDAO userDAO;
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+    public void init() throws ServletException {
+        super.init();
+        // Initialize UserDAO
+        userDAO = new UserDAO();
+    }
 
-        // Retrieve user ID from the database
-        UserDAO userDAO = new UserDAO();
-        int userId = userDAO.getUserIdByUsername(username);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve user login credentials
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
-        // Check if the user exists and verify the password
-        if (userId != -1) {
-            User user = new User();
-            user.setId(userId);
+        try {
+            // Check if the user exists in the database
+            User user = userDAO.getUserByUsername(username);
 
-            // Fetch the user's details from the database
-            user = userDAO.getUserById(user.getId());
-
-            if (PasswordUtils.verifyPassword(password, user.getPassword())) {
-                // Authentication successful
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.getWriter().println("Login successful");
+            if (user != null && PasswordUtils.verifyPassword(password, user.getPassword())) {
+                // User login successful
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().println("Login successful. Welcome, " + user.getUsername() + "!");
             } else {
-                // Authentication failed
-                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                resp.getWriter().println("Invalid username or password");
+                // User login failed
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().println("Invalid username or password.");
             }
-        } else {
-            // User not found
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().println("Invalid username or password");
+        } catch (CustomException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Failed to perform login. Error: " + e.getMessage());
         }
     }
 }

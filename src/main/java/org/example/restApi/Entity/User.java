@@ -4,18 +4,10 @@ import java.util.List;
 
 public class User {
     private int id;
-    private String username;
-    private String password;
-    private String role;
-    private List<String> permissions;
-
-    public User() {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.permissions = permissions;
-    }
+    private String Username;
+    private String Password;
+    private String Role;
+    private String Permissions;
 
     public int getId() {
         return id;
@@ -26,35 +18,34 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return Username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String Username) {
+        this.Username = Username;
     }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.Password = password;
     }
 
     public String getRole() {
-        return role;
+        return Role;
     }
 
     public void setRole(String role) {
-        this.role = role;
+        this.Role = role;
     }
 
-    public List<String> getPermissions() {
-        return permissions;
+    public String getPermissions() {
+        return Permissions;
     }
 
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
+    public void setPermissions(String permissions) {
+        this.Permissions = permissions;
     }
-
 }

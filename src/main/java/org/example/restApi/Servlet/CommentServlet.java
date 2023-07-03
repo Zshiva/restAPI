@@ -10,56 +10,41 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet("/comments")
+@WebServlet("/comment")
 public class CommentServlet extends HttpServlet {
-
     private CommentDAO commentDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
+        // Initialize CommentDAO
         commentDAO = new CommentDAO();
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String postId = req.getParameter("postId");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve the comment data from the request parameters
+        int postId = Integer.parseInt(request.getParameter("postId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        String content = request.getParameter("content");
 
         try {
-            List<Comments> comments = commentDAO.getCommentsByPostId(Integer.parseInt(postId));
-            StringBuilder response = new StringBuilder();
-            for (Comments comment : comments) {
-                response.append("Post ID: ").append(comment.getPostId()).append("\n");
-                response.append("Content: ").append(comment.getContent()).append("\n\n");
-            }
-            resp.setContentType("text/plain");
-            resp.getWriter().write(response.toString());
-        } catch (CustomException e) {
-            e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println("An error occurred while retrieving comments");
-        }
-    }
+            // Create a new Comments object
+            Comments comment = new Comments();
+            comment.setPostId(postId);
+            comment.setUserId(userId);
+            comment.setContent(content);
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String postId = req.getParameter("postId");
-        String content = req.getParameter("content");
-
-        Comments comment = new Comments();
-        comment.setPostId(Integer.parseInt(postId));
-        comment.setContent(content);
-
-        try {
+            // Add the comment to the database using the CommentDAO
             commentDAO.addComment(comment);
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println("Comment added successfully");
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println("Comment added successfully.");
         } catch (CustomException e) {
-            e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println("An error occurred while adding the comment");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().println("Failed to add comment. Error: " + e.getMessage());
         }
     }
 }
+

@@ -1,19 +1,23 @@
 package org.example.restApi.Entity;
 
+import java.util.List;
+
 public class BlogPost {
     private int id;
     private String title;
     private String content;
     private String thumbnailImage;
+    private List<Comments> comments;
+
+    public BlogPost() {
+    }
 
     public BlogPost(int id, String title, String content, String thumbnailImage) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.thumbnailImage = thumbnailImage;
-    }
-
-    public BlogPost() {
+        this.comments = comments;
     }
 
     public int getId() {
@@ -46,5 +50,13 @@ public class BlogPost {
 
     public void setThumbnailImage(String thumbnailImage) {
         this.thumbnailImage = thumbnailImage;
+    }
+
+    public List<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comments> comments) {
+        this.comments = comments;
     }
 }

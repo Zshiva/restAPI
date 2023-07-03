@@ -7,15 +7,12 @@ public class Comments {
     private int userId;
     private String content;
 
-    public Comments(int id, int postId, int userId, String content) {
-        this.id = id;
-        this.postId = postId;
-        this.userId = userId;
-        this.content = content;
-    }
-
     public Comments() {
 
+    }
+
+    public Comments(int id, int postId, int userId, String content) {
+        this.content = content;
     }
 
     public int getId() {
